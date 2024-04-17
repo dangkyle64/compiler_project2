@@ -7,8 +7,15 @@ class parse:
     
     def parse_action(self):
         test = self.test1
+        compare_id = "id"
+        index = 0
+        while index < len(test):
+            if test[index:index+len(compare_id)] == compare_id:
+                print(f"{compare_id}, {index}")
+                index += len(compare_id)
+                
+            else:
+                print(f"{test[index]}, {index}")
+                index += 1
 
-        for char in test:
-            print(char)
-        
         return 0
