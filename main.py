@@ -1,5 +1,4 @@
 from parse_tree import parse 
-
 def main():
 
     parse_result = parse()
