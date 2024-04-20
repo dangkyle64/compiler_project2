@@ -11,7 +11,7 @@ class parse:
 
         #initalize input string to get the input array values
         parse_string = input_data()
-        return 0        input_array = parse_string.split_string()
+        input_array = parse_string.split_string()
 
         #loop until the input string is complete
         for index in range(len(input_array)):
