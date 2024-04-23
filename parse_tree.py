@@ -25,6 +25,16 @@ class parse:
         print (f"Steps: {index+2} ,\nStack: {stack} , \nInput: {input_array} , \nAction: ")
         return 0
     
+    def parse_compare():
+        
+        #production rules + table goes here
+        states = {
+            "state1": {
+                "key": "state1",
+            }
+        }
+
+        return 0
     """
     state counter which would tell us which state it would be in
     take the current input and move along the states 
