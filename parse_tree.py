@@ -25,13 +25,92 @@ class parse:
         print (f"Steps: {index+2} ,\nStack: {stack} , \nInput: {input_array} , \nAction: ")
         return 0
     
-    def parse_compare():
+    def parse_table():
         
         #production rules + table goes here
         states = {
-            "state1": {
-                "key": "state1",
-            }
+            "state_0": {
+                "(": "s4",
+                "id": "s5",
+                "E": "state_1",
+                "T": "state_2",
+                "F": "state_3",
+            },
+
+            "state_1": {
+                "+": "s6",
+                "$": "accept",
+            },
+
+            "state_2": {
+                "+": "r2",
+                "*": "s7",
+                ")": "r2",
+                "$": "r2",
+            },
+
+            "state_3": {
+                "+": "r4",
+                "*": "r4",
+                ")": "r4",
+                "$": "r4",
+            },
+
+            "state_4": {
+                "(": "s4",
+                "id": "s5",
+                "E": "state_8",
+                "T":  "state_2",
+                "F": "state_3",
+            },
+
+            "state_5": {
+                "+": "r6",
+                "*": "r6",
+                ")": "r6",
+                "$": "r6",
+            },
+
+            "state_6": {
+                "(": "s4",
+                "id": "s5",
+                "T": "state_9",
+                "F": "state_3",
+
+            },
+
+            "state_7": {
+                "(": "s4",
+                "id": "s5",
+                "F": "state_10",
+            },
+
+            "state_8": {
+                "+": "s6",
+                ")": "s11",
+            },
+
+            "state_9": {
+                "+": "r1",
+                "*": "s7",
+                ")": "r1",
+                "$": "r1",
+            },
+
+            "state_10": {
+                "+": "r3",
+                "*": "r3",
+                ")": "r3",
+                "$": "r3",
+            },
+
+            "state_11": {
+                "+": "r5",
+                "*": "r5",
+                ")": "r5",
+                "$": "r5",
+            },
+
         }
 
         return 0
