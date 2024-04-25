@@ -6,8 +6,10 @@ class parse:
         self.test1 = ''
     
     def parse_action(self):
+        #initalize starting state
+        state = "state_0"
         #initalize stack array 
-        stack = []
+        stack = [0]
 
         #initalize input string to get the input array values
         parse_string = input_data()
@@ -15,17 +17,21 @@ class parse:
 
         #loop until the input string is complete
         for index in range(len(input_array)):
-            print (f"Steps: {index+1} ,\nStack: {stack} , \nInput: {input_array} , \nAction: ")
+
+            #Put input in to compare with parse table
+            parse_table_action = self.parse_table(state, input_array[index])
+
+            print (f"Steps: {index+1} ,\nStack: {stack} , \nInput: {input_array} , \nAction: {parse_table_action}")
 
             #pop initial value inside of array and append into the stack
-            popped_value = input_array.pop(0)
-            stack.append(popped_value)
+            #popped_value = input_array.pop(0)
+            #stack.append(popped_value)
         
         #print final result
-        print (f"Steps: {index+2} ,\nStack: {stack} , \nInput: {input_array} , \nAction: ")
+        #print (f"Steps: {index+2} ,\nStack: {stack} , \nInput: {input_array} , \nAction: ")
         return 0
     
-    def parse_table():
+    def parse_table(self, current_state, current_input):
         
         #production rules + table goes here
         states = {
@@ -113,7 +119,15 @@ class parse:
 
         }
 
-        return 0
+        #Compare input value with table, return action
+        compare_with_dictionary = states.get(current_state, {})
+        #print(compare_with_dictionary)
+
+        #Get the key and value from the compared values, return invalid if not found
+        next_state = compare_with_dictionary.get(current_input, 'invalid')
+        print(next_state)
+
+        return next_state
     """
     state counter which would tell us which state it would be in
     take the current input and move along the states 

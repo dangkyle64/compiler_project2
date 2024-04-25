@@ -7,7 +7,7 @@ class input_data:
 
     #split the given input into parts to make it easier to compare the inputs
     def split_string(self):
-        test = self.test1
+        test = self.test2
         index = 0
         compare_id = "id"
 
