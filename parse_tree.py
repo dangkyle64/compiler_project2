@@ -4,43 +4,14 @@ from input import input_data
 class parse:
     def __init__(self):
         self.test1 = ''
-    
-    def parse_action(self):
-        #initalize starting state
-        state = "state_0"
-        #initalize stack array 
-        stack = [0]
-
-        #initalize input string to get the input array values
-        parse_string = input_data()
-        input_array = parse_string.split_string()
-
-        #loop until the input string is complete
-        for index in range(len(input_array)):
-
-            #Put input in to compare with parse table
-            parse_table_action = self.parse_table(state, input_array[index])
-
-            print (f"Steps: {index+1} ,\nStack: {stack} , \nInput: {input_array} , \nAction: {parse_table_action}")
-
-            #pop initial value inside of array and append into the stack
-            #popped_value = input_array.pop(0)
-            #stack.append(popped_value)
-        
-        #print final result
-        #print (f"Steps: {index+2} ,\nStack: {stack} , \nInput: {input_array} , \nAction: ")
-        return 0
-    
-    def parse_table(self, current_state, current_input):
-        
         #production rules + table goes here
-        states = {
+        self.states = {
             "state_0": {
                 "(": "s4",
                 "id": "s5",
-                "E": "state_1",
-                "T": "state_2",
-                "F": "state_3",
+                "E": "1",
+                "T": "2",
+                "F": "3",
             },
 
             "state_1": {
@@ -65,9 +36,9 @@ class parse:
             "state_4": {
                 "(": "s4",
                 "id": "s5",
-                "E": "state_8",
-                "T":  "state_2",
-                "F": "state_3",
+                "E": "8",
+                "T": "2",
+                "F": "3",
             },
 
             "state_5": {
@@ -80,15 +51,15 @@ class parse:
             "state_6": {
                 "(": "s4",
                 "id": "s5",
-                "T": "state_9",
-                "F": "state_3",
+                "T": "9",
+                "F": "3",
 
             },
 
             "state_7": {
                 "(": "s4",
                 "id": "s5",
-                "F": "state_10",
+                "F": "10",
             },
 
             "state_8": {
@@ -119,52 +90,119 @@ class parse:
 
         }
 
+        self.reduce_table = {
+            "r1": ("E", "E"),
+            "r2": ("E", "E", "+", "T"),
+            "r3": ("T", "T", "*", "F"),
+            "r4": ("T", "F"),
+            "r5": ("F", "(", "E", ")"),
+            "r6": ("F", "id"),
+        }
+    
+    def parse_action(self):
+        index = 1
+        state = "state_0" 
+        stack = [0]
+
+        #initalize input string to get the input array values
+        parse_string = input_data()
+        input_array = parse_string.split_string()
+
+        #loop until the input string is complete
+        while index != 10:
+            
+            #Put input from the front of input_array in to compare with parse table
+            parse_table_action = self.parse_table(state, input_array[0])
+            
+            print(f"Steps: {index} ,Stack: {stack} , Input: {input_array} , Action: {parse_table_action}")
+            index += 1
+
+            if "s" in parse_table_action:
+
+                #check for which state program is in based on action
+                if "3" in parse_table_action:
+                    state = "state_3"         
+                
+                if "4" in parse_table_action:
+                    state = "state_4"
+
+                if "5" in parse_table_action:
+                    state = "state_5"
+
+                if "6" in parse_table_action:
+                    state = "state_6"
+
+                if "7" in parse_table_action:
+                    state = "state_7"
+
+                if "10" in parse_table_action:
+                    state = "state_10"
+
+                #pop initial value inside of array and append into the stack
+                popped_value = input_array.pop(0)
+                stack.append(popped_value)
+
+            if "r" in parse_table_action:
+                
+                reduce_compare = self.reduce_table[parse_table_action]
+                print (f"reduce: {len(reduce_compare)}")
+                for _ in range(len(reduce_compare)):
+                        print(f"stack: {stack}")
+                        if stack:
+                            stack.pop()
+                
+                left_side = reduce_compare[0]
+                stack.append(left_side)
+                print(stack)
+                state = self.get_next_state(state, left_side)
+                print(state)
+                """
+                reduce_table = {
+                "id": "F",
+                "F": "T",
+                "T": "E",
+                "E": "E'"
+                }
+
+                #pop the old value in the stack
+                popped_stack = stack.pop(-1)
+                #print(f"Popped stack: {popped_stack}")
+
+                #compare the values to the reduce table
+                next_stack_state = reduce_table.get(popped_stack, "invalid")
+                #print (f"Next stack state: {next_stack_state}")
+
+                #append new value into the stack
+                stack.append(next_stack_state)
+
+                if "F" in next_stack_state:
+                    state = "state_3"
+                if "T" in next_stack_state:
+                    state = "state_2"
+                """
+
+            print(state)
+        #print final result
+        #print (f"Steps: {index+2} ,\nStack: {stack} , \nInput: {input_array} , \nAction: ")
+        return 0
+    
+    def parse_table(self, current_state, current_input):
+        
         #Compare input value with table, return action
-        compare_with_dictionary = states.get(current_state, {})
+        compare_with_dictionary = self.states.get(current_state, {})
         #print(compare_with_dictionary)
 
         #Get the key and value from the compared values, return invalid if not found
         next_state = compare_with_dictionary.get(current_input, 'invalid')
-        print(next_state)
+        #print(next_state)
 
         return next_state
-    """
-    state counter which would tell us which state it would be in
-    take the current input and move along the states 
-    look at stack and the input to see if it is valid among one of the states 
-    if true, pop out of the input and into the stack
-    see if the action is reduce (r5) or shift(s5)
-    if reduce, read the production rules and adjust the stack if necessary 
-    """
+    
+    def get_next_state(self, current_state, value):
+        next_state = self.states[current_state].get(value)
 
-    """
-    example: id + id * id
-    step 1, stack 0, input id + id * id $, action s5
-    step 2, stack 0, id 5, input + id * id $, action r6
-    """
-
-    """ MAYBE CREATE AN OBJECT TO HOLD THESE
-    def __init__(self):
-    self.stack = stack1 (figure out which stack can look through and can't)
-    self.step = 0 (add one everytime an action is completed)
-    self.stack = "0id5" 
-    self.input = "+id*id$"
-    self.action = r6
-    """
-
-    """
-    check which state we are in (state 0)
-    look at input (id + id * id)
-    compare that to the LR table (id -> s5)
-    do the action (shift the id into the stack)
-    in that state is there other actions to do (reduce production 4, reduce production 2) 
-    """
-
-    """
-    read the periods to figure out which production rules go where to compare properly 
-    """
-
-    """
-    shift means pop()
-    reduce means change values in stack
-    """
+        if next_state is not None and next_state.startswith("s"):
+            return int(next_state[1:])
+        else:
+            return next_state
+   
