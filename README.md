@@ -2,7 +2,11 @@
  
 ## Introduction
 
-Welcome to the starting repo for parse tree portion of the compiler. The goal for this project is to read the given inputs and return whether they would pass through the parse tree or not.
+Welcome to the repository for parse tree section of a compiler. The aim of the project is to read the given inputs and return whether they would successfuly be accepted or rejected.
+
+(1) (id+id)*id$ 
+(2) id*id$ 
+(3) (id*)$
 
 ## Table of Contents
 - [Introduction](#introduction)
