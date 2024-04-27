@@ -20,6 +20,7 @@ class parse_class:
         
         self.stack_state = [0] 
         self.stack = [0]
+        self.step = 0
 
 ####################################################################################
 
@@ -35,7 +36,13 @@ class parse_class:
         for index in range (len(split_string)+12):
 
             #compare token to the parse table and return an action
-            parse_action = self.parse_table[state][split_string[0]]
+
+            if split_string[0] in self.parse_table[state]:
+                parse_action = self.parse_table[state][split_string[0]]
+
+            else:
+                print(f"String invalid")
+                return 0                
 
             #print(f"current parse_action: {parse_action}")
 
@@ -53,10 +60,10 @@ class parse_class:
                 #print(f"state: {state}")
                 #print (f" state stack: {self.stack_state}")
 
-                print (f"Step: Stack: {self.stack}, Input: {split_string}, Action: {parse_action}")
+                self.step += 1
+                print (f"Step: {self.step}, Stack: {self.stack}, Input: {split_string}, Action: {parse_action}")
             #look for parse_action reduce
             elif parse_action.startswith("r"):
-
                 self.reduce(parse_action)
 
                 #after reducing, take the last known state from stack_state
@@ -64,10 +71,13 @@ class parse_class:
 
                 #print(f"state: {state}")
                 #print (f" state stack: {self.stack_state}")
-                print (f"Step: Stack: {self.stack}, Input: {split_string}, Action: {parse_action}")
+
+                self.step += 1
+                print (f"Step: {self.step}, Stack: {self.stack}, Input: {split_string}, Action: {parse_action}")
             #look for accept which means the string is accepted
             elif "accept" in parse_action:
-                print (f"Step: Stack: {self.stack}, Input: {split_string}, Action: {parse_action}")
+                self.step += 1
+                print (f"Step: {self.step}, Stack: {self.stack}, Input: {split_string}, Action: {parse_action}")
                 print ("Input accepted")
                 return 0
             
@@ -114,6 +124,7 @@ class parse_class:
         #print (f" state stack: {self.stack_state}")
         #print(f"reduce_action: {reduce_action}")
 
+
         #find the next valid state using the stack_state and the reduction replacement
         new_state = self.parse_table[self.stack_state[-1]][reduce_action[0]]
 
@@ -124,7 +135,7 @@ class parse_class:
 
         #replace the old popped value with the reduction rule result
         self.stack.append(reduce_action[0])
-        
+
         #print (f" stack: {self.stack}")
         #print(f"stack_state: {self.stack_state}")
         return 0
